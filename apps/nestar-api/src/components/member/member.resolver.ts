@@ -1,4 +1,4 @@
-import { Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MemberService } from './member.service';
 
 @Resolver()
@@ -25,7 +25,7 @@ export class MemberResolver {
 
     @Query(() => String)
     public async getMember(): Promise<String> {
-        console.log('Mutation: getMember');
+        console.log('Query: getMember');
         return this.memberService.getMember();
     };
 };
