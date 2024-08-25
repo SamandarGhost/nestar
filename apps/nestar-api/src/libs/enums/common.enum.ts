@@ -1,10 +1,10 @@
-export enum Messsage {
+export enum Message {
     SOMETHING_WENT_WRONG = 'Somethinf went wrong!',
     N0_DATA_FOUND = 'No data found!',
     CREATE_FAILED = 'Create failed!',
     UPDATE_FAILED = 'Update failed!',
-    REMOVE_FAILED ='Remove failed!',
-    UPLOAD_FAILED ='Upload failed!',
+    REMOVE_FAILED = 'Remove failed!',
+    UPLOAD_FAILED = 'Upload failed!',
     BAD_REQUEST = 'Bad Request',
 
     NO_MEMBER_NICK = 'No member with that member nick!',
