@@ -18,8 +18,8 @@ export class MemberService {
             // TODO: Authantication via TOKEN
             return result;
         } catch (err) {
-            console.log("Error Service.Model signup:", err);
-            throw new BadRequestException(err);
+            console.log("Error Service.Model signup:", err.message);
+            throw new BadRequestException(Message.USED_MEMBER_NICK_OR_PHONE);
         }
     };
 
