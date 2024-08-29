@@ -7,7 +7,7 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
 import { ObjectId } from 'mongoose';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { MemberType } from '../../libs/enums/member.enum';
+import { MemberStatus, MemberType } from '../../libs/enums/member.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Resolver()

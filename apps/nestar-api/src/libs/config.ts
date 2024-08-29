@@ -1,5 +1,5 @@
 import { ObjectId } from 'bson';
 
-export const shapeIntoMongoobjectId = (target: any) => {
+export const shapeIntoMongoObjectId = (target: any) => {
     return typeof target === 'string' ? new ObjectId(target) : target;
 };
