@@ -9,6 +9,7 @@ import { ObjectId } from 'mongoose';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { MemberStatus, MemberType } from '../../libs/enums/member.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { MemberUpdate } from '../../libs/dto/member/member.update';
 
 @Resolver()
 export class MemberResolver {
@@ -29,19 +30,31 @@ export class MemberResolver {
 
     //  Authenticated
     @UseGuards(AuthGuard)
-    @Mutation(() => String)
-    public async updateMember(@AuthMember('_id') memberId: ObjectId): Promise<String> {
-        console.log('Mutation: updateMember');
-        return this.memberService.updateMember();
-    };
-
-    //  Authenticated
-    @UseGuards(AuthGuard)
     @Query(() => String)
     public async checkAuth(@AuthMember('memberNick') memberNick: string): Promise<string> {
         console.log("Query checkAuth");
         console.log("MemberNick:", memberNick);
         return `Hi ${memberNick}`;
+    };
+
+    @Roles(MemberType.USER, MemberType.AGENT)
+    @UseGuards(AuthGuard)
+    @Query(() => String)
+    public async checkAuthRoles(@AuthMember() authMember: Member): Promise<string> {
+        console.log("Query checkAuth");
+        console.log("MemberNick:",);
+        return `Hi ${authMember.memberNick}, you are ${authMember.memberType} (memberId: ${authMember._id})`;
+    };
+
+    //  Authenticated
+    @UseGuards(AuthGuard)
+    @Mutation(() => Member)
+    public async updateMember(
+        @Args('input') input: MemberUpdate,
+        @AuthMember('_id') memberId: ObjectId,
+    ): Promise<Member> {
+        console.log('Mutation: updateMember');
+        return this.memberService.updateMember(memberId, input);
     };
 
 
@@ -60,15 +73,6 @@ export class MemberResolver {
     public async getAllMembersByAdmin(): Promise<String> {
         console.log('Mutation: getMembersByAdmin');
         return this.memberService.getMembersByAdmin();
-    };
-
-    @Roles(MemberType.USER, MemberType.AGENT)
-    @UseGuards(AuthGuard)
-    @Query(() => String)
-    public async checkAuthRoles(@AuthMember() authMember: Member): Promise<string> {
-        console.log("Query checkAuth");
-        console.log("MemberNick:",);
-        return `Hi ${authMember.memberNick}, you are ${authMember.memberType} (memberId: ${authMember._id})`;
     };
 
     // Authorization: ADMIN
