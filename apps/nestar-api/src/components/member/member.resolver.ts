@@ -1,13 +1,13 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MemberService } from './member.service';
-import { InternalServerErrorException, UseGuards } from '@nestjs/common';
-import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
-import { Member } from '../../libs/dto/member/member';
+import { UseGuards } from '@nestjs/common';
+import { AgentsInquiry, LoginInput, MemberInput } from '../../libs/dto/member/member.input';
+import { Member, Members } from '../../libs/dto/member/member';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
 import { ObjectId } from 'mongoose';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { MemberStatus, MemberType } from '../../libs/enums/member.enum';
+import { MemberType } from '../../libs/enums/member.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { MemberUpdate } from '../../libs/dto/member/member.update';
 import { shapeIntoMongoObjectId } from '../../libs/config';
@@ -65,6 +65,13 @@ export class MemberResolver {
         console.log('Query: getMember');
         const targetId = shapeIntoMongoObjectId(input);
         return this.memberService.getMember(memberId, targetId);
+    };
+
+    @UseGuards(WithoutGuard)
+    @Query(() => Members)
+    public async getAgents(@Args('input') input: AgentsInquiry, @AuthMember('_id') memberId: ObjectId): Promise<Members> {
+        console.log('Query: getAgents');
+        return this.memberService.getAgents(memberId, input);
     };
 
     /* ADMIN */
