@@ -10,7 +10,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { ObjectId } from 'mongoose';
 import { WithoutGuard } from '../auth/guards/without.guard';
 import { shapeIntoMongoObjectId } from '../../libs/config';
-import { PropertyUpdate } from '../../libs/dto/property/property,update';
+import { PropertyUpdate } from '../../libs/dto/property/property.update';
 
 @Resolver()
 export class PropertyResolver {
@@ -49,6 +49,17 @@ export class PropertyResolver {
         console.log('Mutation: updateProperty');
         input._id = shapeIntoMongoObjectId(input._id);
         return await this.propertyService.updateProperty(memberId, input);
+
+    }
+
+    @UseGuards(WithoutGuard)
+    @Query((returns) => Properties)
+    public async getProperties(
+        @Args('input') input: PropertiesInquiry,
+        @AuthMember('_id') memberId: ObjectId,
+    ): Promise<Properties> {
+        console.log('Query: getProperties');
+        return await this.propertyService.getProperties(memberId, input);
 
     }
 
