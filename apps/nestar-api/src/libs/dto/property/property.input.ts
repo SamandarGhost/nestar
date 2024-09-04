@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
 import { IsInt, IsNotEmpty, IsOptional, Length, Min } from "class-validator";
-import { PropertyLocation, PropertyType } from "../../enums/property.enum";
+import { PropertyLocation, PropertyStatus, PropertyType } from "../../enums/property.enum";
 import { ObjectId } from "mongoose";
 
 
