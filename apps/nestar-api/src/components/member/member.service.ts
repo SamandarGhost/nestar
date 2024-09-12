@@ -143,7 +143,7 @@ export class MemberService {
         console.log('executed!');
 
         const { _id, targetKey, modifier } = input;
-        return this.memberModel.findOneAndUpdate(_id, { $inc: { [targetKey]: modifier } }, { new: true }).exec();
+        return this.memberModel.findByIdAndUpdate(_id, { $inc: { [targetKey]: modifier } }, { new: true }).exec();
     }
 };
 
