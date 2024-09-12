@@ -9,6 +9,7 @@ import { MemberModule } from '../member/member.module';
 import { Property } from '../../libs/dto/property/property';
 import { BoardArticleModule } from '../board-article/board-article.module';
 import { PropertyModule } from '../property/property.module';
+import { LikeModule } from '../like/like.module';
 
 @Module({
     imports: [
@@ -17,6 +18,7 @@ import { PropertyModule } from '../property/property.module';
         MemberModule,
         PropertyModule,
         BoardArticleModule,
+        LikeModule
     ],
     providers: [CommentResolver, CommentService],
 })
