@@ -7,18 +7,16 @@ import { LikeModule } from './like/like.module';
 import { ViewModule } from './view/view.module';
 import { FollowModule } from './follow/follow.module';
 import { BoardArticleModule } from './board-article/board-article.module';
-import { CommetResolver } from './commet/commet.resolver';
 
 @Module({
   imports: [
     MemberModule,
     AuthModule,
-    PropertyModule, 
-    BoardArticleModule, 
-    LikeModule, 
-    ViewModule, 
-    CommentModule, 
+    PropertyModule,
+    BoardArticleModule,
+    LikeModule,
+    ViewModule,
+    CommentModule,
     FollowModule],
-  providers: [CommetResolver]
 })
-export class ComponentsModule {}
+export class ComponentsModule { }
