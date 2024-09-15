@@ -23,13 +23,13 @@ const MemberSchema = new Schema({
 
     memberPhone: {
         type: String,
-        index: {unique: true, sparse: true },
+        index: { unique: true, sparse: true },
         required: true,
     },
 
     memberNick: {
         type: String,
-        index: {unique: true, sparse: true },
+        index: { unique: true, sparse: true },
         required: true,
     },
 
@@ -67,6 +67,11 @@ const MemberSchema = new Schema({
     },
 
     memberFollowers: {
+        type: Number,
+        default: 0,
+    },
+
+    memberFollowings: {
         type: Number,
         default: 0,
     },
@@ -110,7 +115,7 @@ const MemberSchema = new Schema({
         type: Date,
     },
 },
- { timestamps: true, collection: 'members' },
+    { timestamps: true, collection: 'members' },
 );
 
 export default MemberSchema;
