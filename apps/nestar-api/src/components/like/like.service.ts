@@ -66,7 +66,7 @@ export class LikeService {
                     list: [
                         { $skip: (page - 1) * limit },
                         { $limit: limit },
-                        lookupFavorite,
+                        lookupFavorite, // bu propertyni qaysi agent yaratgan
                         { $unwind: '$favoriteProperty.memberData' },
                     ],
                     metaCounter: [{ $count: 'total' }],

@@ -23,14 +23,14 @@ export class BatchService {
       { propertyRank: 0 },
     ).exec();
 
-    await this.propertyModel.updateMany(
+    await this.memberModel.updateMany(
       {
         memberStatus: MemberStatus.ACTIVE,
         memberType: MemberType.AGENT
       },
       { memberRank: 0 },
     ).exec();
-  }
+  } // 
 
   public async batchTopProperties(): Promise<void> {
     const properties: Property[] = await this.propertyModel.find(
@@ -43,7 +43,7 @@ export class BatchService {
     const promisedList = properties.map(async (ele: Property) => {
       const { _id, propertyLikes, propertyViews } = ele;
       const rank = propertyLikes * 2 + propertyViews * 1;
-      return await this.propertyModel.findByIdAndUpdate(_id, { propertyrank: rank });
+      return await this.propertyModel.findByIdAndUpdate(_id, { propertyRank: rank });
     });
     await Promise.all(promisedList);
   }
@@ -62,6 +62,7 @@ export class BatchService {
       const rank = memberProperties * 5 + memberArticles * 3 + memberLikes * 2 + memberViews * 1;
       return await this.memberModel.findByIdAndUpdate(_id, { memberRank: rank });
     });
+
     await Promise.all(promisedList);
   }
 }

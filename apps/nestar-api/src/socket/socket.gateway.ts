@@ -14,6 +14,7 @@ export class SocketGateway implements OnGatewayInit {
   handleConnection(client: WebSocket, ...args: any[]) {
     this.summaryClient++;
     this.logger.log(`== Client connected total: ${this.summaryClient} ==`);
+
   }
 
   handleDisconnect(client: WebSocket) {
