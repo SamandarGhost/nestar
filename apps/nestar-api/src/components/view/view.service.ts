@@ -42,7 +42,7 @@ export class ViewService {
                     from: 'properties',
                     localField: 'viewRefId',
                     foreignField: '_id',
-                    as: 'visitedProperty',
+                    as: 'visitedProperty'
                 },
             },
             { $unwind: '$visitedProperty' },
@@ -52,15 +52,14 @@ export class ViewService {
                         { $skip: (page - 1) * limit },
                         { $limit: limit },
                         lookupVisited,
-                        { $unwind: '$visitedProperty.memberData' },
+                        { $unwind: '$visitedProperty.memberData' }
                     ],
                     metaCounter: [{ $count: 'total' }],
-                },
-            },
+                }
+            }
         ]).exec();
         const result: Properties = { list: [], metaCounter: data[0].metaCounter };
         result.list = data[0].list.map((ele) => ele.visitedProperty);
         return result;
-
     }
 }
