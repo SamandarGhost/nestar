@@ -42,7 +42,7 @@ export class PropertyService {
     public async getProperty(memberId: ObjectId, propertyId: ObjectId): Promise<Property> {
         const search: T = {
             _id: propertyId,
-            PropertyStatus: PropertyStatus.ACTIVE,
+            propertyStatus: PropertyStatus.ACTIVE,
         };
         const targetProperty = await this.propertyModel.findOne(search).exec();
         if (!targetProperty) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
