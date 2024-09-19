@@ -18,7 +18,7 @@ export class BatchController {
     this.logger.debug('Batch Server Ready');
   }
 
-  @Cron('00 * * * * *', { name: BATCG_TOP_ROLLBACK })
+  @Cron('00 00 01 * * *', { name: BATCG_TOP_ROLLBACK })
   public async batchRollback() {
     try {
       this.logger['context'] = BATCG_TOP_ROLLBACK;
@@ -29,23 +29,23 @@ export class BatchController {
     }
   }
 
-  @Cron('20 * * * * *', { name: BATCG_TOP_PROPERTIES })
-  public async batchProperties() {
+  @Cron('20 00 01 * * *', { name: BATCG_TOP_PROPERTIES })
+  public async batchTopProperties() {
     try {
       this.logger['context'] = BATCG_TOP_PROPERTIES;
       this.logger.debug('Ecxecuted');
-      await this.batchService.batchProperties();
+      await this.batchService.batchTopProperties();
     } catch (err) {
       this.logger.error('Error on batchProperties:', err)
     }
   }
 
-  @Cron('40 * * * * *', { name: BATCG_TOP_AGENTS })
-  public async batchAgents() {
+  @Cron('40 00 01 * * *', { name: BATCG_TOP_AGENTS })
+  public async batchTopAgents() {
     try {
       this.logger['context'] = BATCG_TOP_AGENTS;
       this.logger.debug('Ecxecuted');
-      await this.batchService.batchAgents();
+      await this.batchService.batchTopAgents();
     } catch (err) {
       this.logger.error('Error on batchAgents:', err)
     }
