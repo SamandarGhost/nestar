@@ -35,7 +35,7 @@ export class LikeService {
             }
         }
 
-        console.log(`-LIKE modifier ${modifier}-`);
+        console.log(`-LIKE modifier ${modifier}`);
         return modifier;
     }
 
