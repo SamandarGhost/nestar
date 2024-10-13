@@ -120,7 +120,7 @@ export class BoardArticleService {
     }
 
     public async likeTargetBoardArticle(memberId: ObjectId, likeRefId: ObjectId): Promise<BoardArticle> {
-        const target: BoardArticle = await this.boardArticleModel.findOne({ _id: likeRefId, articleStatus: BoardArticleStatus.ACTIVE }).exec();
+        const target: BoardArticle = await this.boardArticleModel.findOne({ _id: likeRefId, articleStatus: BoardArticleStatus.ACTIVE });
         if (!target) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
 
         const input: LikeInput = {
@@ -128,12 +128,11 @@ export class BoardArticleService {
             likeRefId: likeRefId,
             likeGroup: LikeGroup.ARTICLE
         };
-
-        // LIKE TOGGLE -1, +1
-        const modifier: number = await this.likeService.toggleLike(input);
-        const result = await this.boardArticleStatsEditor({ _id: likeRefId, targetKey: 'articleLikes', modifier: modifier });
+        let modifier: number = await this.likeService.toggleLike(input);
+        const result = this.boardArticleStatsEditor({ _id: likeRefId, targetKey: 'articleLikes', modifier: modifier });
 
         if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
+
         return result;
     }
 

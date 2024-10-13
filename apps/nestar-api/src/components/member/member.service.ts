@@ -131,7 +131,7 @@ export class MemberService {
     };
 
     public async likeTargetMember(memberId: ObjectId, likeRefId: ObjectId): Promise<Member> {
-        const target: Member = await this.memberModel.findOne({ _id: likeRefId, memberStatus: MemberStatus.ACTIVE }).exec();
+        const target: Member = await this.memberModel.findOne({ _id: likeRefId, memberStatus: MemberStatus.ACTIVE });
         if (!target) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
 
         const input: LikeInput = {
@@ -139,12 +139,11 @@ export class MemberService {
             likeRefId: likeRefId,
             likeGroup: LikeGroup.MEMBER
         };
-
-        // LIKE TOGGLE -1, +1
-        const modifier: number = await this.likeService.toggleLike(input);
-        const result = await this.memberStatsEditor({ _id: likeRefId, targetKey: 'memberLikes', modifier: modifier });
+        let modifier: number = await this.likeService.toggleLike(input);
+        const result = this.memberStatsEditor({ _id: likeRefId, targetKey: 'memberLikes', modifier: modifier });
 
         if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
+
         return result;
     }
 
