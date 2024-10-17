@@ -95,8 +95,8 @@ export class PropertyService {
         this.shapeMatchQuery(match, input);
         console.log('match:', match);
 
-        const result = await this.propertyModel.aggregate(
-            [
+        const result = await this.propertyModel
+            .aggregate([
                 { $match: match },
                 { $sort: sort },
                 {
@@ -111,44 +111,45 @@ export class PropertyService {
                         metaCounter: [{ $count: 'total' }],
                     },
                 },
-            ]
-        ).exec();
+            ])
+            .exec();
         if (!result.length) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
 
         return result[0];
-
     }
 
     private shapeMatchQuery(match: T, input: PropertiesInquiry): void {
         const {
             memberId,
             locationList,
+            typeList,
             roomsList,
             bedsList,
-            typeList,
-            periodsRange,
             pricesRange,
+            periodsRange,
             squaresRange,
             options,
-            text
+            text,
         } = input.search;
         if (memberId) match.memberId = shapeIntoMongoObjectId(memberId);
         if (locationList && locationList.length) match.propertyLocation = { $in: locationList };
+        if (typeList && typeList.length) match.propertyType = { $in: typeList };
         if (roomsList && roomsList.length) match.propertyRooms = { $in: roomsList };
         if (bedsList && bedsList.length) match.propertyBeds = { $in: bedsList };
-        if (typeList && typeList.length) match.propertyType = { $in: typeList };
 
         if (pricesRange) match.propertyPrice = { $gte: pricesRange.start, $lte: pricesRange.end };
         if (periodsRange) match.createdAt = { $gte: periodsRange.start, $lte: periodsRange.end };
         if (squaresRange) match.propertySquare = { $gte: squaresRange.start, $lte: squaresRange.end };
 
-        if (text) match.propertyTitle = { $regex: new RegExp(text, 'i') };
+        if (text)
+            match.propertyTitle = {
+                $regex: new RegExp(text, 'i'),
+            };
         if (options) {
             match['$or'] = options.map((ele) => {
                 return { [ele]: true };
             });
         }
-
     }
 
     public async getFavorites(memberId: ObjectId, input: OrdinaryInquiry): Promise<Properties> {
@@ -214,34 +215,37 @@ export class PropertyService {
         return result;
     }
 
-
     public async getAllPropertiesByAdmin(input: AllPropertiesInquiry): Promise<Properties> {
         const { propertyStatus, propertyLocationList } = input.search;
         const match: T = {};
         const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
 
         if (propertyStatus) match.propertyStatus = propertyStatus;
-        if (propertyLocationList) match.propertyLocationList = { $in: propertyLocationList };
+        if (propertyLocationList) match.propertyLocation = { $in: propertyLocationList };
 
-        const result = await this.propertyModel.aggregate([
-            { $match: match },
-            { $sort: sort },
-            {
-                $facet: {
-                    list: [
-                        { $skip: (input.page - 1) * input.limit },
-                        { $limit: input.limit },
-                        lookupMember,
-                        { $unwind: '$memberData' },
-                    ],
-                    metaCounter: [{ $count: 'total' }],
+        const result = await this.propertyModel
+            .aggregate([
+                { $match: match },
+                { $sort: sort },
+                {
+                    $facet: {
+                        list: [
+                            { $skip: (input.page - 1) * input.limit },
+                            { $limit: input.limit },
+                            lookupMember,
+                            { $unwind: '$memberData' },
+                        ],
+                        metaCounter: [{ $count: 'total' }],
+                    },
                 },
-            },
-        ]).exec();
-        if (!result) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
+            ])
+            .exec();
+
+        if (!result.length) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
 
         return result[0];
     }
+
 
     public async updatePropertyByAdmin(input: PropertyUpdate): Promise<Property> {
         let { propertyStatus, soldAt, deletedAt } = input;
